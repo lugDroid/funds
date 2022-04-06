@@ -2,6 +2,7 @@ package yahoofinanceapi
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -68,6 +69,10 @@ func GetFundData(tick string) YFApiResponse {
 	}
 
 	apiKey := os.Getenv("YF_API_KEY")
+	if apiKey == "" {
+		fmt.Println("API key environment variable not found")
+		os.Exit(1)
+	}
 
 	req.Header.Set("x-api-key", apiKey)
 	resp, err := http.DefaultClient.Do(req)
