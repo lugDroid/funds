@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	models "go/funds/Models"
 	"io/ioutil"
 
 	"github.com/spf13/cobra"
@@ -43,11 +44,5 @@ func readFundsFile() fundList {
 }
 
 type fundList struct {
-	Funds []fund
-}
-
-type fund struct {
-	FundName string
-	Ticker   string
-	Shares   float32
+	Funds []models.Fund
 }
