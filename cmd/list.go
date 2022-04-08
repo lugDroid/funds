@@ -24,3 +24,7 @@ var listCmd = &cobra.Command{
 		}
 	},
 }
+
+func init() {
+	RootCommand.AddCommand(listCmd)
+}

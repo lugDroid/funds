@@ -24,3 +24,7 @@ var checkCmd = &cobra.Command{
 		}
 	},
 }
+
+func init() {
+	RootCommand.AddCommand(checkCmd)
+}
