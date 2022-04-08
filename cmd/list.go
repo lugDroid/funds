@@ -1,10 +1,8 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
-	models "go/funds/Models"
-	"io/ioutil"
+	data "go/funds/Data"
 
 	"github.com/spf13/cobra"
 )
@@ -16,7 +14,7 @@ var listCmd = &cobra.Command{
 		fmt.Println("Accessing saved stocks/funds data...")
 		fmt.Println()
 
-		storedFunds := readFundsFile()
+		storedFunds := data.ReadFundsFile()
 
 		for _, fund := range storedFunds.Funds {
 			fmt.Println("Fund:\t", fund.FundName)
@@ -25,24 +23,4 @@ var listCmd = &cobra.Command{
 			fmt.Println()
 		}
 	},
-}
-
-func readFundsFile() fundList {
-	data, err := ioutil.ReadFile("./funds.json")
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	var fundList fundList
-
-	err = json.Unmarshal(data, &fundList)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	return fundList
-}
-
-type fundList struct {
-	Funds []models.Fund
 }
