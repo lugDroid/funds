@@ -32,3 +32,14 @@ func ReadFundsFile() FundList {
 
 	return fundList
 }
+
+// WriteFundsFile writes the provided FundList to file
+// overwritting any previous content
+func WriteFundsFile(list FundList) {
+	jsonData, err := json.Marshal(list)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	ioutil.WriteFile(fundsFilePath, jsonData, 0644)
+}
