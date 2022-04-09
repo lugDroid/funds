@@ -36,7 +36,7 @@ func ReadFundsFile() FundList {
 // WriteFundsFile writes the provided FundList to file
 // overwritting any previous content
 func WriteFundsFile(list FundList) {
-	jsonData, err := json.Marshal(list)
+	jsonData, err := json.MarshalIndent(list, "", "\t")
 	if err != nil {
 		fmt.Println(err)
 	}
