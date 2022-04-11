@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	data "go/funds/Data"
+	models "go/funds/Models"
 
 	"github.com/spf13/cobra"
 )
@@ -24,7 +25,7 @@ var deleteCmd = &cobra.Command{
 			}
 		}
 
-		data.WriteFundsFile(data.FundList{
+		data.WriteFundsFile(models.Portfolio{
 			Funds: funds,
 		})
 

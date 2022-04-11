@@ -11,19 +11,15 @@ import (
 
 const fundsFilePath string = "./funds.json"
 
-type FundList struct {
-	Funds []models.Fund
-}
-
 // ReadFundsFile reads the contents of funds.json
 // and returns a FundList type
-func ReadFundsFile() FundList {
+func ReadFundsFile() models.Portfolio {
 	data, err := ioutil.ReadFile(fundsFilePath)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	var fundList FundList
+	var fundList models.Portfolio
 
 	err = json.Unmarshal(data, &fundList)
 	if err != nil {
@@ -35,7 +31,7 @@ func ReadFundsFile() FundList {
 
 // WriteFundsFile writes the provided FundList to file
 // overwritting any previous content
-func WriteFundsFile(list FundList) {
+func WriteFundsFile(list models.Portfolio) {
 	jsonData, err := json.MarshalIndent(list, "", "\t")
 	if err != nil {
 		fmt.Println(err)
