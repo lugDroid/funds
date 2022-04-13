@@ -9,30 +9,30 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var assetClasses = &cobra.Command{
-	Use:   "asset-classes",
-	Short: "List the asset classes defined in the portfolio",
+var assets = &cobra.Command{
+	Use:   "assets",
+	Short: "List the assets defined in the portfolio",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Listing defined asset classes...")
+		fmt.Println("Listing defined assets...")
 		fmt.Println()
 
-		assetClasses := data.ReadFundsFile().AssetClasses
+		assets := data.ReadFundsFile().AssetsAllocation
 
-		for _, class := range assetClasses {
-			fmt.Println("Class ID:\t\t", class.Id)
-			fmt.Println("Class Name:\t\t", class.Name)
-			fmt.Println("Percent of Total:\t", class.PercentOfTotal)
+		for _, asset := range assets {
+			fmt.Println("Asset ID:\t", asset.Id)
+			fmt.Println("Asset Name:\t", asset.Name)
+			fmt.Println("Allocated:\t", asset.Allocated)
 			fmt.Println()
 		}
 	},
 }
 
-var addClass = &cobra.Command{
-	Use:   "add [class name] [percent of total portfolio value]",
-	Short: "Add a new asset class",
+var addAsset = &cobra.Command{
+	Use:   "add [asset name] [allocation value (%)]",
+	Short: "Add a new asset",
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Adding new asset class...")
+		fmt.Println("Adding new asset...")
 		fmt.Println()
 
 		// Confirm second argument is convertible to float
@@ -45,49 +45,49 @@ var addClass = &cobra.Command{
 		// open file, append to list and save
 		fundList := data.ReadFundsFile()
 
-		newClass := models.AssetClass{
-			Id:             len(fundList.AssetClasses) + 1,
-			Name:           args[0],
-			PercentOfTotal: float32(percent),
+		newAsset := models.Asset{
+			Id:        len(fundList.AssetsAllocation) + 1,
+			Name:      args[0],
+			Allocated: float32(percent),
 		}
 
-		fundList.AssetClasses = append(fundList.AssetClasses, newClass)
+		fundList.AssetsAllocation = append(fundList.AssetsAllocation, newAsset)
 		data.WriteFundsFile(fundList)
-		fmt.Println("New asset class successfully added")
+		fmt.Println("New asset successfully added")
 	},
 }
 
-var deleteClass = &cobra.Command{
-	Use:   "delete [class ID]",
-	Short: "Delete an existing asset class",
+var deleteAsset = &cobra.Command{
+	Use:   "delete [asset ID]",
+	Short: "Delete an existing asset",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Deleting existing asset class...")
+		fmt.Println("Deleting existing asset...")
 		fmt.Println()
 
 		// Confirm argument is convertible to int
 		id, err := strconv.Atoi(args[0])
 		if err != nil {
-			fmt.Println("Asset class ID is required")
+			fmt.Println("Asset ID is required")
 			return
 		}
 
 		fundsList := data.ReadFundsFile()
 
-		for i, assetClass := range fundsList.AssetClasses {
-			if assetClass.Id == id {
-				fundsList.AssetClasses = append(fundsList.AssetClasses[:i], fundsList.AssetClasses[i+1:]...)
+		for i, asset := range fundsList.AssetsAllocation {
+			if asset.Id == id {
+				fundsList.AssetsAllocation = append(fundsList.AssetsAllocation[:i], fundsList.AssetsAllocation[i+1:]...)
 				break
 			}
 		}
 
 		data.WriteFundsFile(fundsList)
 
-		fmt.Println("Asset class deleted successfully")
+		fmt.Println("Asset deleted successfully")
 	},
 }
 
 func init() {
-	RootCommand.AddCommand(assetClasses)
-	assetClasses.AddCommand(addClass, deleteClass)
+	RootCommand.AddCommand(assets)
+	assets.AddCommand(addAsset, deleteAsset)
 }

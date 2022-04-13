@@ -1,8 +1,8 @@
 package models
 
 type Portfolio struct {
-	AssetClasses []AssetClass
-	Funds        []Fund
+	AssetsAllocation []Asset
+	Funds            []Fund
 }
 
 type Fund struct {
@@ -12,8 +12,8 @@ type Fund struct {
 	Shares   float32
 }
 
-type AssetClass struct {
-	Id             int
-	Name           string
-	PercentOfTotal float32
+type Asset struct {
+	Id        int
+	Name      string
+	Allocated float32
 }
