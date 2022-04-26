@@ -22,13 +22,13 @@ var assignCmd = &cobra.Command{
 			return
 		}
 
-		fundList := data.ReadFundsFile()
+		portfolio := data.ReadStorageFile()
 
-		for i, fund := range fundList.Funds {
-			if fund.Ticker == args[0] {
-				fundList.Funds[i].AssetId = int(id)
+		for i, asset := range portfolio.Assets {
+			if asset.Ticker == args[0] {
+				portfolio.Assets[i].Id = int(id)
 
-				data.WriteFundsFile(fundList)
+				data.WriteStorageFile(portfolio)
 				fmt.Println("Category successfully assigned")
 
 				return

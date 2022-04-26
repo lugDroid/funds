@@ -15,7 +15,7 @@ var addCmd = &cobra.Command{
 	Short: "Add the number of shares of the provided stock or fund",
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Adding new fund %s\n", args[0])
+		fmt.Printf("Adding new asset %s\n", args[0])
 		fmt.Println()
 
 		// Confirm second argument is convertible to float
@@ -25,29 +25,29 @@ var addCmd = &cobra.Command{
 			return
 		}
 
-		// Get new fund information from yahoo api
-		fundData := yahoofinanceapi.GetFundData(args[0])
+		// Get new asset information from yahoo api
+		assetData := yahoofinanceapi.GetAssetData(args[0])
 
-		newFund := models.Fund{
-			FundName: fundData.QuoteResponse.Result[0].LongName,
-			Ticker:   args[0],
-			Shares:   float32(shares),
+		newAsset := models.Asset{
+			Name:   assetData.QuoteResponse.Result[0].LongName,
+			Ticker: args[0],
+			Shares: float32(shares),
 		}
 
-		// check if fund is already saved
-		fundList := data.ReadFundsFile()
+		// check if asset is already saved
+		portfolio := data.ReadStorageFile()
 
-		for _, fund := range fundList.Funds {
-			if fund.Ticker == newFund.Ticker {
-				fmt.Println("Fund already saved, nothing was added")
+		for _, asset := range portfolio.Assets {
+			if asset.Ticker == newAsset.Ticker {
+				fmt.Println("Asset already saved, nothing was added")
 				return
 			}
 		}
 
 		// open file, append and save
-		fundList.Funds = append(fundList.Funds, newFund)
-		data.WriteFundsFile(fundList)
-		fmt.Printf("New stock/fund '%s' successfully saved\n", newFund.FundName)
+		portfolio.Assets = append(portfolio.Assets, newAsset)
+		data.WriteStorageFile(portfolio)
+		fmt.Printf("New asset '%s' successfully saved\n", newAsset.Name)
 	},
 }
 

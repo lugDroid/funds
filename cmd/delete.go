@@ -13,20 +13,20 @@ var deleteCmd = &cobra.Command{
 	Short: "Delete the provided stock or fund",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Deleting fund '%s'\n", args[0])
+		fmt.Printf("Deleting asset '%s'\n", args[0])
 		fmt.Println()
 
-		funds := data.ReadFundsFile().Funds
+		assets := data.ReadStorageFile().Assets
 
-		for i, fund := range funds {
-			if fund.Ticker == args[0] {
-				funds = append(funds[:i], funds[i+1:]...)
+		for i, a := range assets {
+			if a.Ticker == args[0] {
+				assets = append(assets[:i], assets[i+1:]...)
 				break
 			}
 		}
 
-		data.WriteFundsFile(models.Portfolio{
-			Funds: funds,
+		data.WriteStorageFile(models.Portfolio{
+			Assets: assets,
 		})
 
 		fmt.Println("Fund/stock deleted successfully")

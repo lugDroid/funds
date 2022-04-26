@@ -1,19 +1,19 @@
 package models
 
 type Portfolio struct {
-	AssetsAllocation []Asset
-	Funds            []Fund
-}
-
-type Fund struct {
-	FundName string
-	AssetId  int
-	Ticker   string
-	Shares   float32
+	Categories []Category
+	Assets     []Asset
 }
 
 type Asset struct {
-	Id        int
-	Name      string
-	Allocated float32
+	Name   string
+	Id     int
+	Ticker string
+	Shares float32
+}
+
+type Category struct {
+	Id       int
+	Name     string
+	PercGoal float32
 }

@@ -17,7 +17,7 @@ var resultCmd = &cobra.Command{
 		fmt.Println("Calculating portfolio value...")
 		fmt.Println()
 
-		results := models.CalculateResults(data.ReadFundsFile())
+		results := models.CalculateResults(data.ReadStorageFile())
 
 		writer := tabwriter.NewWriter(os.Stdout, 8, 8, 1, '\t', 0)
 		defer writer.Flush()

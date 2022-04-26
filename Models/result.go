@@ -12,13 +12,13 @@ type result struct {
 func CalculateResults(data Portfolio) []result {
 	var results []result
 
-	for _, r := range data.Funds {
-		assetData := yahoofinanceapi.GetFundData(r.Ticker)
+	for _, r := range data.Assets {
+		assetData := yahoofinanceapi.GetAssetData(r.Ticker)
 		assetValue := assetData.QuoteResponse.Result[0].RegularMarketPrice * float64(r.Shares)
-		assetCategory := data.AssetsAllocation[r.AssetId-1]
+		assetCategory := data.Categories[r.Id-1]
 
 		newResult := result{
-			Name:           r.FundName,
+			Name:           r.Name,
 			Value:          float32(assetValue),
 			Category:       assetCategory.Name,
 			PercentOfTotal: 0,

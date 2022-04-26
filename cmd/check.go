@@ -15,14 +15,14 @@ var checkCmd = &cobra.Command{
 		fmt.Println("Retrieving stock/fund information...")
 		fmt.Println()
 
-		data := yahoofinanceapi.GetFundData(args[0])
+		assetData := yahoofinanceapi.GetAssetData(args[0])
 
-		if len(data.QuoteResponse.Result) > 0 {
-			result := data.QuoteResponse.Result[0]
+		if len(assetData.QuoteResponse.Result) > 0 {
+			result := assetData.QuoteResponse.Result[0]
 			fmt.Println("Name:\t\t", result.LongName)
 			fmt.Println("Price:\t\t", result.RegularMarketPrice, result.Currency)
-			fmt.Printf("Change:\t\t %.2f %%\n", data.QuoteResponse.Result[0].RegularMarketChangePercent)
-			fmt.Printf("YTD Return:\t %.2f %%\n", data.QuoteResponse.Result[0].YtdReturn)
+			fmt.Printf("Change:\t\t %.2f %%\n", assetData.QuoteResponse.Result[0].RegularMarketChangePercent)
+			fmt.Printf("YTD Return:\t %.2f %%\n", assetData.QuoteResponse.Result[0].YtdReturn)
 		} else {
 			fmt.Println("Ticker not valid")
 		}

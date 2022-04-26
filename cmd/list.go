@@ -14,12 +14,12 @@ var listCmd = &cobra.Command{
 		fmt.Println("Accessing saved stocks/funds data...")
 		fmt.Println()
 
-		storedFunds := data.ReadFundsFile()
+		portfolio := data.ReadStorageFile()
 
-		for _, fund := range storedFunds.Funds {
+		for _, asset := range portfolio.Assets {
 			var categoryName string
-			for _, c := range storedFunds.AssetsAllocation {
-				if fund.AssetId == c.Id {
+			for _, c := range portfolio.Categories {
+				if asset.Id == c.Id {
 					categoryName = c.Name
 					break
 				}
@@ -27,10 +27,10 @@ var listCmd = &cobra.Command{
 				categoryName = "Not Assigned"
 			}
 
-			fmt.Println("Fund:\t\t", fund.FundName)
-			fmt.Println("Ticker:\t\t", fund.Ticker)
+			fmt.Println("Fund:\t\t", asset.Name)
+			fmt.Println("Ticker:\t\t", asset.Ticker)
 			fmt.Println("Category:\t", categoryName)
-			fmt.Println("Shares:\t\t", fund.Shares)
+			fmt.Println("Shares:\t\t", asset.Shares)
 			fmt.Println()
 		}
 	},

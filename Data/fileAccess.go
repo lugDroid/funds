@@ -9,29 +9,29 @@ import (
 	"io/ioutil"
 )
 
-const fundsFilePath string = "./funds.json"
+const fundsFilePath string = "./portfolio.json"
 
-// ReadFundsFile reads the contents of funds.json
-// and returns a FundList type
-func ReadFundsFile() models.Portfolio {
+// ReadStorageFile reads the contents of funds.json
+// and returns a Portfolio type
+func ReadStorageFile() models.Portfolio {
 	data, err := ioutil.ReadFile(fundsFilePath)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	var fundList models.Portfolio
+	var portfolio models.Portfolio
 
-	err = json.Unmarshal(data, &fundList)
+	err = json.Unmarshal(data, &portfolio)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	return fundList
+	return portfolio
 }
 
-// WriteFundsFile writes the provided FundList to file
+// WriteStorageFile writes the provided Portfolio to file
 // overwritting any previous content
-func WriteFundsFile(list models.Portfolio) {
+func WriteStorageFile(list models.Portfolio) {
 	jsonData, err := json.MarshalIndent(list, "", "\t")
 	if err != nil {
 		fmt.Println(err)

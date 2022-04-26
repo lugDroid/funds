@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func GetFundData(tick string) YFApiResponse {
+func GetAssetData(tick string) YFApiResponse {
 	baseUrl := "https://yfapi.net/v6/finance/quote?region=ES&lang=en&symbols="
 	baseUrl += tick
 	req, err := http.NewRequest("GET", baseUrl, nil)
