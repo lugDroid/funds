@@ -5,6 +5,7 @@ import (
 	data "go/funds/Data"
 	models "go/funds/Models"
 	yahoofinanceapi "go/funds/YahooFinanceAPI"
+	"os"
 	"strconv"
 
 	"github.com/spf13/cobra"
@@ -26,10 +27,14 @@ var addCmd = &cobra.Command{
 		}
 
 		// Get new asset information from yahoo api
-		assetData := yahoofinanceapi.GetAssetData(args[0])
+		assetData, err := yahoofinanceapi.GetAssetData(args[0])
+		if err != nil {
+			fmt.Println("Ticker code not valid")
+			os.Exit(1)
+		}
 
 		newAsset := models.Asset{
-			Name:   assetData.QuoteResponse.Result[0].LongName,
+			Name:   assetData.LongName,
 			Ticker: args[0],
 			Shares: float32(shares),
 		}

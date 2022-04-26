@@ -1,6 +1,10 @@
 package models
 
-import yahoofinanceapi "go/funds/YahooFinanceAPI"
+import (
+	"fmt"
+	yahoofinanceapi "go/funds/YahooFinanceAPI"
+	"os"
+)
 
 type result struct {
 	Name           string
@@ -13,8 +17,13 @@ func CalculateResults(data Portfolio) []result {
 	var results []result
 
 	for _, r := range data.Assets {
-		assetData := yahoofinanceapi.GetAssetData(r.Ticker)
-		assetValue := assetData.QuoteResponse.Result[0].RegularMarketPrice * float64(r.Shares)
+		assetData, err := yahoofinanceapi.GetAssetData(r.Ticker)
+		if err != nil {
+			fmt.Println("Ticker code not valid")
+			os.Exit(1)
+		}
+
+		assetValue := assetData.RegularMarketPrice * float64(r.Shares)
 		assetCategory := data.Categories[r.Id-1]
 
 		newResult := result{

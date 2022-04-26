@@ -2,13 +2,14 @@ package yahoofinanceapi
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 )
 
-func GetAssetData(tick string) YFApiResponse {
+func GetAssetData(tick string) (*Result, error) {
 	baseUrl := "https://yfapi.net/v6/finance/quote?region=ES&lang=en&symbols="
 	baseUrl += tick
 	req, err := http.NewRequest("GET", baseUrl, nil)
@@ -35,9 +36,13 @@ func GetAssetData(tick string) YFApiResponse {
 		println(err)
 	}
 
-	var r YFApiResponse
+	var response YFApiResponse
 
-	json.Unmarshal([]byte(body), &r)
+	json.Unmarshal([]byte(body), &response)
 
-	return r
+	if len(response.QuoteResponse.Result) == 0 {
+		return nil, errors.New("no results received")
+	}
+
+	return &response.QuoteResponse.Result[0], nil
 }

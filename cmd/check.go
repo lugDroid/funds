@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	yahoofinanceapi "go/funds/YahooFinanceAPI"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -15,17 +16,16 @@ var checkCmd = &cobra.Command{
 		fmt.Println("Retrieving stock/fund information...")
 		fmt.Println()
 
-		assetData := yahoofinanceapi.GetAssetData(args[0])
-
-		if len(assetData.QuoteResponse.Result) > 0 {
-			result := assetData.QuoteResponse.Result[0]
-			fmt.Println("Name:\t\t", result.LongName)
-			fmt.Println("Price:\t\t", result.RegularMarketPrice, result.Currency)
-			fmt.Printf("Change:\t\t %.2f %%\n", assetData.QuoteResponse.Result[0].RegularMarketChangePercent)
-			fmt.Printf("YTD Return:\t %.2f %%\n", assetData.QuoteResponse.Result[0].YtdReturn)
-		} else {
-			fmt.Println("Ticker not valid")
+		assetData, err := yahoofinanceapi.GetAssetData(args[0])
+		if err != nil {
+			fmt.Println("Ticker code not valid")
+			os.Exit(1)
 		}
+
+		fmt.Println("Name:\t\t", assetData.LongName)
+		fmt.Println("Price:\t\t", assetData.RegularMarketPrice, assetData.Currency)
+		fmt.Printf("Change:\t\t %.2f %%\n", assetData.RegularMarketChangePercent)
+		fmt.Printf("YTD Return:\t %.2f %%\n", assetData.YtdReturn)
 	},
 }
 
